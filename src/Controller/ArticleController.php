@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
@@ -33,4 +34,14 @@ class ArticleController extends AbstractController
             'categories' => $categories, 'tableau' => $tableau
         ]);
     }
+
+    /**
+     * @Route("/article/{id}", name="article_show")
+     */
+    public function show(Article $article) :Response
+    {
+        return $this->render('article/article.html.twig', ['article'=>$article]);
+    }
+
+
 }
