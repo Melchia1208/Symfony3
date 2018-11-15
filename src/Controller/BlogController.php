@@ -20,13 +20,9 @@ class BlogController extends AbstractController
      * @Route("/", name="blog_index")
      * @return Response A response instance
      */
-    public function index() : Response
+    public function index(Request $request) : Response
     {
-        $form = $this->createForm(
-            ArticleSearchType::class,
-            null,
-            ['method' => Request::METHOD_GET]
-        );
+
 
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
@@ -36,6 +32,19 @@ class BlogController extends AbstractController
             throw $this->createNotFoundException(
                 'No article found in article\'s table.'
             );
+        }
+        $data = new Article();
+        $form = $this->createForm(ArticleSearchType::class, $data);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em -> persist($data);
+            $em ->flush();
+            return $this->redirectToRoute("blog_index");
+
+
         }
 
         return $this->render(
