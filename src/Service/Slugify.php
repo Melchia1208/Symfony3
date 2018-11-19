@@ -19,11 +19,12 @@ class Slugify
         $input = str_replace(' ', '-', $input);
         $symboles=['!','"', '.', ',', ':', '\'', '\"', '?', '%','(', ')', '{', '}', '[', ']', '#', '&', '@', '/', ';'];
         $input = str_replace($symboles, '', $input);
+        $input = strtolower($input);
 
         $long = strlen($input);
         $tableau = str_split($input);
 
-        for ($i=0 ; $i<$long; $i++)
+        for ($i=0 ; $i<($long-1); $i++)
         {
             if ($tableau[$i] == '-' && $tableau[$i+1] == '-')
             {
@@ -31,6 +32,8 @@ class Slugify
             }
         }
         $input = implode($tableau);
+
+
 
         return $input;
 
