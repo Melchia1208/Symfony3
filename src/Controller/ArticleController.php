@@ -44,8 +44,8 @@ class ArticleController extends AbstractController
     public function ArticleById($id)
     {
         $article = $this->getDoctrine()->getRepository(Article::class)->findOneBy(['id'=>$id]);
-        $tags = $article->getTags();
+        //$tags = $article->getTags();
 
-        return $this->render('article/articlebyid.html.twig', ['article' => $article, 'tags' => $tags]);
+        return $this->render('article/articlebyid.html.twig', ['article' => $article]);
     }
 }

@@ -5,6 +5,7 @@ use App\Entity\Category;
 use phpDocumentor\Reflection\Types\This;
 use App\Entity\Tag;
 use App\Form\ArticleSearchType;
+use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ class BlogController extends AbstractController
      * @Route("/", name="blog_index")
      * @return Response A response instance
      */
-    public function index(Request $request): Response
+    public function index(Request $request, Slugify $slugify): Response
     {
 
 
@@ -29,19 +30,23 @@ class BlogController extends AbstractController
             ->getRepository(Article::class)
             ->findAll();
 
+
         if (!$articles) {
             throw $this->createNotFoundException(
                 'No article found in article\'s table.'
             );
         }
-        $data = new Article();
-        $form = $this->createForm(ArticleSearchType::class, $data);
+        $article = new Article();
+        $form = $this->createForm(ArticleSearchType::class, $article);
         $form->handleRequest($request);
+
         if ($form->isSubmitted()) {
 
 
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($data);
+            $article->setSlug($slugify->generate($article->getTitle()));
+            $em->persist($article);
             $em->flush();
             return $this->redirectToRoute("blog_index");
 
