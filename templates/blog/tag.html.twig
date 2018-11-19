@@ -1,0 +1,24 @@
+{# templates/blog/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Tag{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+
+
+
+
+    <strong>Tag :</strong>
+    <li>{{ tag.name }} </li>
+    <ul>
+        {% for article in articles %}
+            <li><a href="/article/{{ article.id }}">{{ article.title }} </a></li>
+
+        {% else %}
+            <li>No article for this tag</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
